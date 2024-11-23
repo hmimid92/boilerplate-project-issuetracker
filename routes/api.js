@@ -62,6 +62,9 @@ module.exports = function (app) {
       //   res.json({ error: 'required field(s) missing' })
       // } else {
       //   try {
+      if(!project) {
+        res.json({error: "could not find project"})
+      } else {
         const issueNew = new Issue({
           assigned_to: req.body.assigned_to,
           status_text: req.body.status_text,
@@ -83,9 +86,9 @@ module.exports = function (app) {
           created_on: issueNew.created_on,
           updated_on: issueNew.updated_on
         };
-        project = issueToSave;
           const issueSaved = await issueNew.save()
-          res.json(project)
+          res.json(issueToSave)
+      }
         // } catch (err) {
         //   res.send(err)
         // }
