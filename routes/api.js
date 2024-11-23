@@ -68,8 +68,8 @@ module.exports = function (app) {
           issue_title: req.body.issue_title,
           issue_text: req.body.issue_text,
           created_by: req.body.created_by,
-          created_on: new Date(Date.now()).toString(),
-          updated_on: new Date(Date.now()).toString()
+          created_on: new Date(Date.now()),
+          updated_on: new Date(Date.now())
         })
         try {
           const issueSaved = await issueNew.save()
