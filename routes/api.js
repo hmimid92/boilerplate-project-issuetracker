@@ -9,6 +9,7 @@ const IssueSchema = new Schema({
   assigned_to: String,
   status_text: String,
   open: Boolean,
+  _id: { required: true, type: String },
   issue_title: { required: true, type: String },
   issue_text: { required: true, type: String },
   created_by: { required: true, type: String },
@@ -17,6 +18,12 @@ const IssueSchema = new Schema({
 });
 
 const Issue = mongoose.model("Issue", IssueSchema);
+
+const ProjectSchema = new Schema({
+  projectName: { required: true, type: String },
+});
+
+const Project = mongoose.model("Project", ProjectSchema);
 
 module.exports = function (app) {
 
@@ -61,10 +68,18 @@ module.exports = function (app) {
       if (req.body.issue_title === "" || req.body.issue_text === "" || req.body.created_by === "") {
         res.json({ error: 'required field(s) missing' })
       } else {
+        let projectNameNew = await Project.findOne({projectName: project});
+        if(!projectNameNew) {
+          projectNameNew = new Project({
+            projectName: project
+          });
+          projectNameNew = await projectNameNew.save();
+        }
         const issueNew = new Issue({
           assigned_to: req.body.assigned_to,
           status_text: req.body.status_text,
           open: true,
+          _id: projectNameNew._id,
           issue_title: req.body.issue_title,
           issue_text: req.body.issue_text,
           created_by: req.body.created_by,
