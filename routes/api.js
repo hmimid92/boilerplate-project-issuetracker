@@ -85,7 +85,7 @@ module.exports = function (app) {
         };
         project = issueToSave;
           const issueSaved = await issueNew.save()
-          res.json({project})
+          res.json(project)
         // } catch (err) {
         //   res.send(err)
         // }
