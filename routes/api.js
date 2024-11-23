@@ -58,12 +58,8 @@ module.exports = function (app) {
 
     .post(async (req, res) => {
       let project = req.params.project;
-      // if (req.body.issue_title === "" || req.body.issue_text === "" || req.body.created_by === "") {
-      //   res.json({ error: 'required field(s) missing' })
-      // } else {
-      //   try {
-      if(!project) {
-        res.json({error: "could not find project"})
+      if (req.body.issue_title === "" || req.body.issue_text === "" || req.body.created_by === "") {
+        res.json({ error: 'required field(s) missing' })
       } else {
         const issueNew = new Issue({
           assigned_to: req.body.assigned_to,
@@ -89,10 +85,6 @@ module.exports = function (app) {
           const issueSaved = await issueNew.save()
           res.json(issueToSave)
       }
-        // } catch (err) {
-        //   res.send(err)
-        // }
-      // }
     })
 
     .put(function (req, res) {
