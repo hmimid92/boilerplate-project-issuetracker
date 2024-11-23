@@ -22,37 +22,37 @@ module.exports = function (app) {
 
   app.route('/api/issues/:project')
 
-    .get(async (req, res) => {
+    .get(function (req, res) {
       let project = req.params.project;
-      try {
+      // try {
 
-        if (Object.values(req.query).length === 0) {
-          const issues = await Issue.find({}).select("-__v");
-          res.json(issues);
-        } else {
-          let issueFilter = {}
-          if (req.query.open) {
-            issueFilter["open"] = req.query.open
-          }
-          if (req.query.assigned_to) {
-            issueFilter["assigned_to"] = req.query.assigned_to
-          }
-          if (req.query.issue_title) {
-            issueFilter["issue_title"] = req.query.issue_title
-          }
-          if (req.query.issue_text) {
-            issueFilter["issue_text"] = req.query.issue_text
-          }
-          if (req.query.created_by) {
-            issueFilter["created_by"] = req.query.created_by
-          }
+      //   if (Object.values(req.query).length === 0) {
+      //     const issues = await Issue.find({}).select("-__v");
+      //     res.json(issues);
+      //   } else {
+      //     let issueFilter = {}
+      //     if (req.query.open) {
+      //       issueFilter["open"] = req.query.open
+      //     }
+      //     if (req.query.assigned_to) {
+      //       issueFilter["assigned_to"] = req.query.assigned_to
+      //     }
+      //     if (req.query.issue_title) {
+      //       issueFilter["issue_title"] = req.query.issue_title
+      //     }
+      //     if (req.query.issue_text) {
+      //       issueFilter["issue_text"] = req.query.issue_text
+      //     }
+      //     if (req.query.created_by) {
+      //       issueFilter["created_by"] = req.query.created_by
+      //     }
           
-          const issuesFilter = await Issue.find(issueFilter);
-          res.json(issuesFilter);
-        }
-      } catch (error) {
-        res.send(error);
-      }
+      //     const issuesFilter = await Issue.find(issueFilter);
+      //     res.json(issuesFilter);
+      //   }
+      // } catch (error) {
+      //   res.send(error);
+      // }
 
     })
 
@@ -95,47 +95,47 @@ module.exports = function (app) {
       // }
     })
 
-    .put(async (req, res) => {
-      let project = req.params.project;
-      if(req.body._id === "") {
-        res.json({ error: 'missing _id' })
-      } else {
-        let id_issue = await Issue.findById(req.body._id);
-        if(id_issue) {
-          let issueUpdated = Issue.findByIdAndUpdate(req.body._id, 
-            { 
-               assigned_to: req.body.assigned_to,
-               status_text: req.body.status_text,
-               open: req.body.open, 
-               issue_title: req.body.issue_title,
-               issue_text: req.body.issue_text,
-               created_by: req.body.created_by,
-               updated_on: new Date(Date.now()).toString()
-            }, {new: true});
-           if(!Object.keys(issueUpdated._update).includes("updated_on")) {
-            res.json({ error: 'no update field(s) sent', '_id': req.body._id });
-           } else {
-            res.json({ result: 'successfully updated', '_id': req.body._id });
-           }
-        } else {
-          res.json({ error: 'could not update', '_id': req.body._id });
-        }
-      }
+    .put(function (req, res) {
+      // let project = req.params.project;
+      // if(req.body._id === "") {
+      //   res.json({ error: 'missing _id' })
+      // } else {
+      //   let id_issue = await Issue.findById(req.body._id);
+      //   if(id_issue) {
+      //     let issueUpdated = Issue.findByIdAndUpdate(req.body._id, 
+      //       { 
+      //          assigned_to: req.body.assigned_to,
+      //          status_text: req.body.status_text,
+      //          open: req.body.open, 
+      //          issue_title: req.body.issue_title,
+      //          issue_text: req.body.issue_text,
+      //          created_by: req.body.created_by,
+      //          updated_on: new Date(Date.now()).toString()
+      //       }, {new: true});
+      //      if(!Object.keys(issueUpdated._update).includes("updated_on")) {
+      //       res.json({ error: 'no update field(s) sent', '_id': req.body._id });
+      //      } else {
+      //       res.json({ result: 'successfully updated', '_id': req.body._id });
+      //      }
+      //   } else {
+      //     res.json({ error: 'could not update', '_id': req.body._id });
+      //   }
+      // }
     })
 
-    .delete(async (req, res) => {
+    .delete(function (req, res) {
       let project = req.params.project;
-      try {
-        const IssueDelete = await  Issue.findOneAndDelete({_id: req.body._id})
-        if (!IssueDelete) {
-           res.json({ error: 'missing _id' });
-        } else {
-          res.json({ result: 'successfully deleted', '_id': req.body._id });
-        }
-           res.status(200).send("Id " + req.params.id + " has been deleted");
-      } catch (err) {
-           res.json({ error: 'could not delete', '_id': req.body._id });
-      }
+      // try {
+      //   const IssueDelete = await  Issue.findOneAndDelete({_id: req.body._id})
+      //   if (!IssueDelete) {
+      //      res.json({ error: 'missing _id' });
+      //   } else {
+      //     res.json({ result: 'successfully deleted', '_id': req.body._id });
+      //   }
+      //      res.status(200).send("Id " + req.params.id + " has been deleted");
+      // } catch (err) {
+      //      res.json({ error: 'could not delete', '_id': req.body._id });
+      // }
     });
 
 };
