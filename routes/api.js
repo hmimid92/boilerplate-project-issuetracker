@@ -27,7 +27,7 @@ module.exports = function (app) {
       try {
 
         if (Object.values(req.query).length === 0) {
-          const issues = await Issue.find({});
+          const issues = await Issue.find({}).select("-__v");
           res.json(issues);
         } else {
           let issueFilter = {}
@@ -58,10 +58,10 @@ module.exports = function (app) {
 
     .post(async (req, res) => {
       let project = req.params.project;
-      if (req.body.issue_title === "" || req.body.issue_text === "" || req.body.created_by === "") {
-        res.json({ error: 'required field(s) missing' })
-      } else {
-        try {
+      // if (req.body.issue_title === "" || req.body.issue_text === "" || req.body.created_by === "") {
+      //   res.json({ error: 'required field(s) missing' })
+      // } else {
+      //   try {
         const issueNew = new Issue({
           assigned_to: req.body.assigned_to,
           status_text: req.body.status_text,
@@ -72,22 +72,23 @@ module.exports = function (app) {
           created_on: new Date(Date.now()),
           updated_on: new Date(Date.now())
         })
+        const issueToSave = {
+          assigned_to: issueNew.assigned_to,
+          status_text: issueNew.status_text,
+          open: issueNew.open,
+          _id: issueNew._id,
+          issue_title: issueNew.issue_title,
+          issue_text: issueNew.issue_text,
+          created_by: issueNew.created_by,
+          created_on: issueNew.created_on,
+          updated_on: issueNew.updated_on
+        };
           const issueSaved = await issueNew.save()
-          res.json({
-            _id: issueSaved._id,
-            assigned_to: issueSaved.assigned_to,
-            status_text: issueSaved.status_text,
-            open: issueSaved.open,
-            issue_title: issueSaved.issue_title,
-            issue_text: issueSaved.issue_text,
-            created_by: issueSaved.created_by,
-            created_on:issueSaved.created_on,
-            updated_on: issueSaved.updated_on
-          })
-        } catch (err) {
-          res.send(err)
-        }
-      }
+          res.json(issueToSave)
+        // } catch (err) {
+        //   res.send(err)
+        // }
+      // }
     })
 
     .put(async (req, res) => {
