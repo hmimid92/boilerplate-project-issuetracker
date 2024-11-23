@@ -83,8 +83,9 @@ module.exports = function (app) {
           created_on: issueNew.created_on,
           updated_on: issueNew.updated_on
         };
+        project = issueToSave;
           const issueSaved = await issueNew.save()
-          res.json(issueToSave)
+          res.json({project})
         // } catch (err) {
         //   res.send(err)
         // }
