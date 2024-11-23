@@ -73,7 +73,17 @@ module.exports = function (app) {
         })
         try {
           const issueSaved = await issueNew.save()
-          res.json(issueSaved)
+          res.json({
+            _id: issueSaved._id,
+            assigned_to: issueSaved.assigned_to,
+            status_text: issueSaved.status_text,
+            open: issueSaved.open,
+            issue_title: issueSaved.issue_title,
+            issue_text: issueSaved.issue_text,
+            created_by: issueSaved.created_by,
+            created_on:issueSaved.created_on,
+            updated_on: issueSaved.updated_on
+          })
         } catch (err) {
           res.send(err)
         }
