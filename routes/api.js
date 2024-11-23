@@ -61,6 +61,7 @@ module.exports = function (app) {
       if (req.body.issue_title === "" || req.body.issue_text === "" || req.body.created_by === "") {
         res.json({ error: 'required field(s) missing' })
       } else {
+        try {
         const issueNew = new Issue({
           assigned_to: req.body.assigned_to,
           status_text: req.body.status_text,
@@ -71,7 +72,6 @@ module.exports = function (app) {
           created_on: new Date(Date.now()),
           updated_on: new Date(Date.now())
         })
-        try {
           const issueSaved = await issueNew.save()
           res.json({
             _id: issueSaved._id,
