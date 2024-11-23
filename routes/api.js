@@ -9,9 +9,9 @@ const IssueSchema = new Schema({
   assigned_to: String,
   status_text: String,
   open: Boolean,
-  issue_title: String,
-  issue_text: String,
-  created_by: String,
+  issue_title: { required: true, type: String },
+  issue_text: { required: true, type: String },
+  created_by: { required: true, type: String },
   created_on: Date,
   updated_on: Date
 });
@@ -46,7 +46,7 @@ module.exports = function (app) {
       //     if (req.query.created_by) {
       //       issueFilter["created_by"] = req.query.created_by
       //     }
-          
+
       //     const issuesFilter = await Issue.find(issueFilter);
       //     res.json(issuesFilter);
       //   }
@@ -82,8 +82,8 @@ module.exports = function (app) {
           created_on: issueNew.created_on,
           updated_on: issueNew.updated_on
         };
-          const issueSaved = await issueNew.save()
-          res.json(issueToSave)
+        const issueSaved = await issueNew.save()
+        res.json(issueToSave)
       }
     })
 
