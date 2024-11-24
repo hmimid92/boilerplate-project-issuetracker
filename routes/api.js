@@ -70,12 +70,12 @@ module.exports = function (app) {
       } else {
         let projectNameNew = await Project.findOne({projectName: project});
         if(!projectNameNew) {
+          res.json({error: "could not find project"});
+        } else {
           projectNameNew = new Project({
             projectName: project
           });
           projectNameNew = await projectNameNew.save();
-        } else {
-
           const issueNew = new Issue({
             assigned_to: req.body.assigned_to,
             status_text: req.body.status_text,
