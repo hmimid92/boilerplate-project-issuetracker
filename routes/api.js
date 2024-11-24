@@ -74,31 +74,34 @@ module.exports = function (app) {
             projectName: project
           });
           projectNameNew = await projectNameNew.save();
+        } else {
+
+          const issueNew = new Issue({
+            assigned_to: req.body.assigned_to,
+            status_text: req.body.status_text,
+            open: true,
+            _id: projectNameNew._id,
+            issue_title: req.body.issue_title,
+            issue_text: req.body.issue_text,
+            created_by: req.body.created_by,
+            created_on: new Date(Date.now()),
+            updated_on: new Date(Date.now())
+          })
+          // const issueToSave = {
+          //   assigned_to: issueNew.assigned_to,
+          //   status_text: issueNew.status_text,
+          //   open: issueNew.open,
+          //   _id: issueNew._id,
+          //   issue_title: issueNew.issue_title,
+          //   issue_text: issueNew.issue_text,
+          //   created_by: issueNew.created_by,
+          //   created_on: issueNew.created_on,
+          //   updated_on: issueNew.updated_on
+          // };
+          res.json(issueNew)
+          const issueSaved = await issueNew.save()
         }
-        const issueNew = new Issue({
-          assigned_to: req.body.assigned_to,
-          status_text: req.body.status_text,
-          open: true,
-          _id: projectNameNew._id,
-          issue_title: req.body.issue_title,
-          issue_text: req.body.issue_text,
-          created_by: req.body.created_by,
-          created_on: new Date(Date.now()),
-          updated_on: new Date(Date.now())
-        })
-        const issueToSave = {
-          assigned_to: issueNew.assigned_to,
-          status_text: issueNew.status_text,
-          open: issueNew.open,
-          _id: issueNew._id,
-          issue_title: issueNew.issue_title,
-          issue_text: issueNew.issue_text,
-          created_by: issueNew.created_by,
-          created_on: issueNew.created_on,
-          updated_on: issueNew.updated_on
-        };
-        const issueSaved = await issueNew.save()
-        res.json(issueToSave)
+
       }
     })
 
