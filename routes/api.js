@@ -29,37 +29,37 @@ module.exports = function (app) {
 
   app.route('/api/issues/:project')
 
-    .get(function (req, res) {
+    .get(async (req, res) => {
       let project = req.params.project;
-      // try {
+      try {
 
-      //   if (Object.values(req.query).length === 0) {
-      //     const issues = await Issue.find({}).select("-__v");
-      //     res.json(issues);
-      //   } else {
-      //     let issueFilter = {}
-      //     if (req.query.open) {
-      //       issueFilter["open"] = req.query.open
-      //     }
-      //     if (req.query.assigned_to) {
-      //       issueFilter["assigned_to"] = req.query.assigned_to
-      //     }
-      //     if (req.query.issue_title) {
-      //       issueFilter["issue_title"] = req.query.issue_title
-      //     }
-      //     if (req.query.issue_text) {
-      //       issueFilter["issue_text"] = req.query.issue_text
-      //     }
-      //     if (req.query.created_by) {
-      //       issueFilter["created_by"] = req.query.created_by
-      //     }
+        if (Object.values(req.query).length === 0) {
+          const issues = await Issue.find({}).select("-__v");
+          res.json(issues);
+        } else {
+          let issueFilter = {}
+          if (req.query.open) {
+            issueFilter["open"] = req.query.open
+          }
+          if (req.query.assigned_to) {
+            issueFilter["assigned_to"] = req.query.assigned_to
+          }
+          if (req.query.issue_title) {
+            issueFilter["issue_title"] = req.query.issue_title
+          }
+          if (req.query.issue_text) {
+            issueFilter["issue_text"] = req.query.issue_text
+          }
+          if (req.query.created_by) {
+            issueFilter["created_by"] = req.query.created_by
+          }
 
-      //     const issuesFilter = await Issue.find(issueFilter);
-      //     res.json(issuesFilter);
-      //   }
-      // } catch (error) {
-      //   res.send(error);
-      // }
+          const issuesFilter = await Issue.find(issueFilter);
+          res.json(issuesFilter);
+        }
+      } catch (error) {
+        res.send(error);
+      }
 
     })
 
@@ -71,6 +71,10 @@ module.exports = function (app) {
         let projectNameNew = await Project.findOne({projectName: project});
         if(!projectNameNew) {
           res.json({error: "could not find project"});
+          projectNameNew = new Project({
+            projectName: project
+          });
+          projectNameNew = await projectNameNew.save();
         } else {
           projectNameNew = new Project({
             projectName: project
