@@ -69,13 +69,6 @@ module.exports = function (app) {
         res.json({ error: 'required field(s) missing' })
       } else {
         let projectNameNew = await Project.findOne({projectName: project});
-        if(!projectNameNew) {
-          res.json({error: "could not find project"});
-          projectNameNew = new Project({
-            projectName: project
-          });
-          projectNameNew = await projectNameNew.save();
-        } else {
           projectNameNew = new Project({
             projectName: project
           });
@@ -105,8 +98,6 @@ module.exports = function (app) {
           res.json(issueNew)
           const issueSaved = await issueNew.save()
         }
-
-      }
     })
 
     .put(function (req, res) {
