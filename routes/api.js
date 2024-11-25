@@ -126,9 +126,8 @@ module.exports = function (app) {
        ) {
        res.json({ error: 'no update field(s) sent', '_id': req.body._id });
             } else {
-                let issueUpdated = await Issue.findByIdAndUpdate(req.body._id,
+                 await Issue.findByIdAndUpdate(req.body._id,
                   {
-                    _id: req.body._id,
                     assigned_to: req.body.assigned_to,
                     status_text: req.body.status_text,
                     open: req.body.open,
@@ -145,7 +144,6 @@ module.exports = function (app) {
                   }).catch(err => {
                     res.json({ error: 'could not update', '_id': req.body._id });
                   });
-                  await issueUpdated.save();
          }
         }
      })
