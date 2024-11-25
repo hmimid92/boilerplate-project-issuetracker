@@ -135,7 +135,6 @@ module.exports = function (app) {
             try {
               let issueUpdated = await Issue.findByIdAndUpdate(req.body._id,
                 {
-                  _id: req.body._id,
                   assigned_to: req.body.assigned_to,
                   status_text: req.body.status_text,
                   open: req.body.open,
