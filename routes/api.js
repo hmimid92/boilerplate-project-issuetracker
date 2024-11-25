@@ -138,7 +138,7 @@ module.exports = function (app) {
                 created_by: req.body.created_by,
                 updated_on: new Date(Date.now()).toString()
               }, { new: true });
-          if (!Object.keys(issueUpdated._update).includes("updated_on")) {
+          if (!Object.keys(issueUpdated._update).includes('assigned_to','status_text','open','issue_title','issue_text','created_by','updated_on')) {
             res.json({ error: 'no update field(s) sent', '_id': req.body._id });
           } else {
             res.json({ result: 'successfully updated', '_id': req.body._id });
