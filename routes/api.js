@@ -117,11 +117,11 @@ module.exports = function (app) {
       if(!projectName) {
         res.send("no project found");
       }
-      if (!req.body.assigned_to ||
-        !req.body.status_text ||
-        !req.body.open ||
-        !req.body.issue_title ||
-        !req.body.issue_text ||
+      if (!req.body.assigned_to &&
+        !req.body.status_text &&
+        !req.body.open &&
+        !req.body.issue_title &&
+        !req.body.issue_text &&
         !req.body.created_by
      ) {
      res.json({ error: 'no update field(s) sent', '_id': req.body._id });
