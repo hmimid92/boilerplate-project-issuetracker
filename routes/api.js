@@ -126,7 +126,6 @@ module.exports = function (app) {
        ) {
        res.json({ error: 'no update field(s) sent', '_id': req.body._id });
             } else {
-              try {
                 let issueUpdated = await Issue.findByIdAndUpdate(req.body._id,
                   {
                     _id: req.body._id,
@@ -137,15 +136,18 @@ module.exports = function (app) {
                     issue_text: req.body.issue_text,
                     created_by: req.body.created_by,
                     updated_on: new Date(Date.now())
+                  }).then(updated => {
+                    if(updated) {
+                      res.json({ result: 'successfully updated', '_id': req.body._id });
+                    } else {
+                      res.json({ error: 'could not update', '_id': req.body._id });
+                    }
+                  }).catch(err => {
+                    res.json({ error: 'could not update', '_id': req.body._id });
                   });
-    
                   await issueUpdated.save();
-                  res.json({ result: 'successfully updated', '_id': req.body._id });  
-          } catch(err) {
-            res.json({ error: 'could not update', '_id': req.body._id });
-          }
-            }
-      }
+         }
+        }
      })
      .delete(async (req, res) => {
       // let project = req.params.project;
