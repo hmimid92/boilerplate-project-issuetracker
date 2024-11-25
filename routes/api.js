@@ -37,6 +37,7 @@ module.exports = function (app) {
           const issues = await Issue.find({project_id: projectName._id}).select("-__v");
           res.json(issues);
         } else {
+          console.log("dsvsdg")
 
           let issueFilter = {}
           if (req.query.open) {
@@ -63,11 +64,12 @@ module.exports = function (app) {
           if (req.query.updated_on) {
             issueFilter["updated_on"] = req.query.updated_on
           }
-          if (req.query.project_id) {
-            issueFilter["updated_on"] = req.query.project_id
-          }
+          // if (req.query.project_id) {
+          //   issueFilter["updated_on"] = req.query.project_id
+          // }
 
-          const issuesFilter = await Issue.find({...issueFilter,project_id: projectName._id});
+
+          const issuesFilter = await Issue.find({...issueFilter});
           res.json(issuesFilter);
         }
       } catch (error) {
