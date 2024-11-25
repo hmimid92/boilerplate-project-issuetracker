@@ -120,25 +120,30 @@ module.exports = function (app) {
       if (!issues.map(e => e._id.valueOf()).includes(req.body._id)) {
         res.json({ error: 'missing _id' });
       }
-
-      console.log(Object.keys(req.body))
-      if (!Object.keys(req.body).includes('assigned_to','status_text','open','issue_title','issue_text','created_by','updated_on','_id')) {
-     res.json({ error: 'no update field(s) sent', '_id': req.body._id });
-          } 
             try {
-              let issueUpdated = await Issue.findByIdAndUpdate(req.body._id,
-                {
-                  assigned_to: req.body.assigned_to,
-                  status_text: req.body.status_text,
-                  open: req.body.open,
-                  issue_title: req.body.issue_title,
-                  issue_text: req.body.issue_text,
-                  created_by: req.body.created_by,
-                  updated_on: new Date()
-                });
-  
-                await issueUpdated.save();
-                res.json({ result: 'successfully updated', '_id': req.body._id });  
+              if (!req.body.assigned_to &&
+                !req.body.status_text &&
+                !req.body.open &&
+                !req.body.issue_title &&
+                !req.body.issue_text &&
+                !req.body.created_by
+             ) {
+             res.json({ error: 'no update field(s) sent', '_id': req.body._id });
+                  } else {
+                    let issueUpdated = await Issue.findByIdAndUpdate(req.body._id,
+                      {
+                        assigned_to: req.body.assigned_to,
+                        status_text: req.body.status_text,
+                        open: req.body.open,
+                        issue_title: req.body.issue_title,
+                        issue_text: req.body.issue_text,
+                        created_by: req.body.created_by,
+                        updated_on: new Date()
+                      });
+        
+                      await issueUpdated.save();
+                      res.json({ result: 'successfully updated', '_id': req.body._id });  
+                  }
               } catch(err) {
                 res.json({ error: 'could not update', '_id': req.body._id });
               }
