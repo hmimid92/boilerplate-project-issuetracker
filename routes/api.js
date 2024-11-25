@@ -116,7 +116,8 @@ module.exports = function (app) {
       const issues = await Issue.find({ project_id: projectName._id }).select("-__v");
       // console.log(issues.map(e => e._id.valueOf()))
       if (!issues.map(e => e._id.valueOf()).includes(req.body._id)) {
-        res.json({ error: 'missing _id' })
+        res.json({ error: 'missing _id' });
+        return;
       } 
         try {
            await Issue.findByIdAndUpdate({_id: req.body._id},
@@ -129,15 +130,14 @@ module.exports = function (app) {
               created_by: req.body.created_by,
               updated_on: new Date(Date.now()).toString()
             }, { new: true });
-
+          } catch(err) {
+            res.json({ error: 'could not update', '_id': req.body._id });
+          }
           if ( !req.body._id && !req.body.assigned_to && !req.body.status_text  && !req.body.open && !req.body.issue_title && !req.body.issue_text && !req.body.created_by) {
             res.json({ error: 'no update field(s) sent', '_id': req.body._id });
           } else {
             res.json({ result: 'successfully updated', '_id': req.body._id });
           }
-       } catch(err) {
-          res.json({ error: 'could not update', '_id': req.body._id });
-        }
     })
 
     .delete(async (req, res) => {
