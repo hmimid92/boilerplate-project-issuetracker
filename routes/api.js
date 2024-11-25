@@ -156,13 +156,13 @@ module.exports = function (app) {
       if (!issues.map(e => e._id.valueOf()).includes(req.body._id)) {
         res.json({ error: 'missing _id' });
      } else {
-      try {
-         await  Issue.findOneAndDelete(req.body._id);
-        res.json({ result: 'successfully deleted', '_id': req.body._id });
-     } catch (err) {
+         await  Issue.findOneAndDelete({_id: req.body._id}).then(deleted => {
+          if(deleted) {
+            res.json({ result: 'successfully deleted', '_id': req.body._id });
+          }
+         }).catch(err => {
           res.json({ error: 'could not delete', '_id': req.body._id });
-     }
+        });
      }
     });
-
 };
