@@ -9,7 +9,7 @@ const IssueSchema = new Schema({
   assigned_to: String,
   status_text: String,
   open: Boolean,
-  _id: { required: true, type: String },
+  project_id: { required: true, type: String },
   issue_title: { required: true, type: String },
   issue_text: { required: true, type: String },
   created_by: { required: true, type: String },
@@ -65,25 +65,35 @@ module.exports = function (app) {
 
     .post(async (req, res) => {
       let project = req.params.project;
-      if (req.body.issue_title === "" || req.body.issue_text === "" || req.body.created_by === "") {
-        res.json({ error: 'required field(s) missing' })
-      } else {
+      if (!req.body.issue_title || !req.body.issue_text || !req.body.created_by) {
+        res.json({ error: 'required field(s) missing' });
+        return;
+      } 
+      try {
         let projectNameNew = await Project.findOne({projectName: project});
+        if(!projectNameNew) {
           projectNameNew = new Project({
             projectName: project
           });
           projectNameNew = await projectNameNew.save();
-          const issueNew = new Issue({
-            assigned_to: req.body.assigned_to,
-            status_text: req.body.status_text,
-            open: true,
-            _id: projectNameNew._id,
-            issue_title: req.body.issue_title,
-            issue_text: req.body.issue_text,
-            created_by: req.body.created_by,
-            created_on: new Date(Date.now()),
-            updated_on: new Date(Date.now())
-          })
+        }
+        const issueNew = new Issue({
+          assigned_to: req.body.assigned_to || "",
+          status_text: req.body.status_text || "",
+          open: true,
+          project_id: projectNameNew._id,
+          issue_title: req.body.issue_title || "",
+          issue_text: req.body.issue_text || "",
+          created_by: req.body.created_by,
+          created_on: new Date(Date.now()) || "",
+          updated_on: new Date(Date.now()) || ""
+        });
+        let issueSaved = await issueNew.save();
+        res.json(issueSaved);
+      } catch (error) {
+        res.json({ error: 'could not post' });
+      }
+          
           // const issueToSave = {
           //   assigned_to: issueNew.assigned_to,
           //   status_text: issueNew.status_text,
@@ -95,9 +105,6 @@ module.exports = function (app) {
           //   created_on: issueNew.created_on,
           //   updated_on: issueNew.updated_on
           // };
-          res.json(issueNew)
-          const issueSaved = await issueNew.save()
-        }
     })
 
     .put(function (req, res) {
