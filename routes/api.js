@@ -137,7 +137,7 @@ module.exports = function (app) {
                 _id: req.body._id,
                 assigned_to: req.body.assigned_to,
                 status_text: req.body.status_text,
-                open: req.body.open === 'false' ? false : true,
+                open: req.body.open,
                 issue_title: req.body.issue_title,
                 issue_text: req.body.issue_text,
                 created_by: req.body.created_by,
