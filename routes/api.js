@@ -37,6 +37,10 @@ module.exports = function (app) {
           const issues = await Issue.find({project_id: projectName._id}).select("-__v");
           res.json(issues);
         } else {
+
+          // {
+          //   project_id: projectNameNew._id,
+          // }
           let issueFilter = {}
           if (req.query.open) {
             issueFilter["open"] = req.query.open
@@ -52,6 +56,15 @@ module.exports = function (app) {
           }
           if (req.query.created_by) {
             issueFilter["created_by"] = req.query.created_by
+          }
+          if (req.query.status_text) {
+            issueFilter["status_text"] = req.query.status_text
+          }
+          if (req.query.created_on) {
+            issueFilter["created_on"] = req.query.created_on
+          }
+          if (req.query.updated_on) {
+            issueFilter["updated_on"] = req.query.updated_on
           }
 
           const issuesFilter = await Issue.find({...issueFilter,project_id: projectName._id});
