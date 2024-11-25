@@ -117,20 +117,14 @@ module.exports = function (app) {
       if (!issues.map(e => e._id.valueOf()).includes(req.body._id)) {
         res.json({ error: 'missing _id' });
       } else {
-        if (!req.body.assigned_to &&
-          !req.body.status_text &&
-          !req.body.open &&
-          !req.body.issue_title &&
-          !req.body.issue_text &&
-          !req.body.created_by
-       ) {
+        if (!req.body.assigned_to && !req.body.status_text && !req.body.open && !req.body.issue_title && !req.body.issue_text && !req.body.created_by ) {
        res.json({ error: 'no update field(s) sent', '_id': req.body._id });
             } else {
-                 await Issue.findByIdAndUpdate(req.body._id,
+            await Issue.findByIdAndUpdate(req.body._id,
                   {
                     assigned_to: req.body.assigned_to,
                     status_text: req.body.status_text,
-                    open: req.body.open,
+                    open: req.body.open === 'false' ? false : true,
                     issue_title: req.body.issue_title,
                     issue_text: req.body.issue_text,
                     created_by: req.body.created_by,
@@ -144,6 +138,7 @@ module.exports = function (app) {
                   }).catch(err => {
                     res.json({ error: 'could not update', '_id': req.body._id });
                   });
+
          }
         }
      })
