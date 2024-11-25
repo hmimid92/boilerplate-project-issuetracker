@@ -119,9 +119,11 @@ module.exports = function (app) {
         res.json({ error: 'missing _id' });
         return;
       } 
+      let issueUpdated;
         try {
-           await Issue.findByIdAndUpdate({_id: req.body._id},
+            issueUpdated = await Issue.findByIdAndUpdate({_id: req.body._id},
             {
+              _id: req.body._id,
               assigned_to: req.body.assigned_to,
               status_text: req.body.status_text,
               open: req.body.open === 'false' ? false : true,
@@ -133,7 +135,7 @@ module.exports = function (app) {
           } catch(err) {
             res.json({ error: 'could not update', '_id': req.body._id });
           }
-          if ( req.body._id === undefined || req.body.assigned_to === undefined || req.body.status_text === undefined  || req.body.open === undefined || req.body.issue_title === undefined || req.body.issue_text === undefined || req.body.created_by === undefined) {
+          if (!Object.keys(issueUpdated._update).includes('assigned_to','status_text','open','issue_title','issue_text','created_by','updated_on', '_id')) {
             res.json({ error: 'no update field(s) sent', '_id': req.body._id });
           } else {
             res.json({ result: 'successfully updated', '_id': req.body._id });
