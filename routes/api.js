@@ -118,7 +118,9 @@ module.exports = function (app) {
       if (!issues.map(e => e._id.valueOf()).includes(req.body._id)) {
         res.json({ error: 'missing _id' });
         return;
-      } 
+      } else if (!Object.keys(req.body).includes('assigned_to','status_text','open','issue_title','issue_text','created_by','updated_on')) {
+        res.json({ error: 'no update field(s) sent', '_id': req.body._id });
+      } else {
         try {
           await Issue.findByIdAndUpdate({_id: req.body._id},
             {
@@ -130,15 +132,12 @@ module.exports = function (app) {
               created_by: req.body.created_by,
               updated_on: new Date(Date.now()).toString()
             }, { new: true });
+            res.json({ result: 'successfully updated', '_id': req.body._id });
+
           } catch(err) {
             res.json({ error: 'could not update', '_id': req.body._id });
           }
-
-          if (!Object.keys(req.body).includes('assigned_to','status_text','open','issue_title','issue_text','created_by','updated_on')) {
-            res.json({ error: 'no update field(s) sent', '_id': req.body._id });
-          } else {
-            res.json({ result: 'successfully updated', '_id': req.body._id });
-          }
+      }
     })
 
     .delete(async (req, res) => {
