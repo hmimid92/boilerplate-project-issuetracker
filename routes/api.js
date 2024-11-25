@@ -119,10 +119,16 @@ module.exports = function (app) {
         res.json({ error: 'missing _id' });
         return;
       } 
-       if (!Object.keys(req.body).includes('assigned_to','status_text','open','issue_title','issue_text','created_by','updated_on')) {
+       if (!req.body.assigned_to ||
+           !req.body.status_text ||
+           !req.body.open ||
+           !req.body.issue_title ||
+           !req.body.issue_text ||
+           !req.body.created_by
+        ) {
         res.json({ error: 'no update field(s) sent', '_id': req.body._id });
-        return;
-      } 
+         return;
+        } 
         try {
           await Issue.findByIdAndUpdate({_id: req.body._id},
             {
