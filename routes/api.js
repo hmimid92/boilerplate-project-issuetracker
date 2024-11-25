@@ -157,8 +157,7 @@ module.exports = function (app) {
         res.json({ error: 'missing _id' });
      } else {
       try {
-        let issueDeleted = await  Issue.findOneAndDelete(req.body._id);
-        await issueDeleted.save();
+         await  Issue.findOneAndDelete(req.body._id);
         res.json({ result: 'successfully deleted', '_id': req.body._id });
      } catch (err) {
           res.json({ error: 'could not delete', '_id': req.body._id });
