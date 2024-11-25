@@ -117,7 +117,6 @@ module.exports = function (app) {
       if(!projectName) {
         res.send("no project found");
       }
-      // console.log(issues.map(e => e._id.valueOf()))
       if (!issues.map(e => e._id.valueOf()).includes(req.body._id)) {
         res.json({ error: 'missing _id' });
         return;
@@ -132,25 +131,25 @@ module.exports = function (app) {
      ) {
      res.json({ error: 'no update field(s) sent', '_id': req.body._id });
       return;
-     } 
-      
-          try {
-            await Issue.findByIdAndUpdate({_id: req.body._id},
-              {
-                _id: req.body._id,
-                assigned_to: req.body.assigned_to,
-                status_text: req.body.status_text,
-                open: req.body.open,
-                issue_title: req.body.issue_title,
-                issue_text: req.body.issue_text,
-                created_by: req.body.created_by,
-                updated_on: new Date(Date.now())
-              });
-
-              res.json({ result: 'successfully updated', '_id': req.body._id });  
-            } catch(err) {
-              res.json({ error: 'could not update', '_id': req.body._id });
-            }
+          } else {
+            try {
+              await Issue.findByIdAndUpdate({_id: req.body._id},
+                {
+                  _id: req.body._id,
+                  assigned_to: req.body.assigned_to,
+                  status_text: req.body.status_text,
+                  open: req.body.open,
+                  issue_title: req.body.issue_title,
+                  issue_text: req.body.issue_text,
+                  created_by: req.body.created_by,
+                  updated_on: new Date()
+                });
+  
+                res.json({ result: 'successfully updated', '_id': req.body._id });  
+              } catch(err) {
+                res.json({ error: 'could not update', '_id': req.body._id });
+              }
+          }
               })
 
     .delete(async (req, res) => {
