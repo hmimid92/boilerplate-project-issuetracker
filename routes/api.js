@@ -32,9 +32,9 @@ module.exports = function (app) {
     .get(async (req, res) => {
       let project = req.params.project;
       try {
-
+        let projectName = await Project.findOne({projectName: project});
         if (Object.values(req.query).length === 0) {
-          const issues = await Issue.find({}).select("-__v");
+          const issues = await Issue.find({project_id: projectName._id}).select("-__v");
           res.json(issues);
         } else {
           let issueFilter = {}
@@ -54,7 +54,7 @@ module.exports = function (app) {
             issueFilter["created_by"] = req.query.created_by
           }
 
-          const issuesFilter = await Issue.find(issueFilter);
+          const issuesFilter = await Issue.find({...issueFilter,project_id: projectName._id});
           res.json(issuesFilter);
         }
       } catch (error) {
