@@ -114,6 +114,9 @@ module.exports = function (app) {
       
       let projectName = await Project.findOne({ projectName: project });
       const issues = await Issue.find({ project_id: projectName._id }).select("-__v");
+      if(!projectName) {
+        res.send("no project found");
+      }
       // console.log(issues.map(e => e._id.valueOf()))
       if (!issues.map(e => e._id.valueOf()).includes(req.body._id)) {
         res.json({ error: 'missing _id' });
@@ -134,9 +137,10 @@ module.exports = function (app) {
           try {
             await Issue.findByIdAndUpdate({_id: req.body._id},
               {
+                _id: req.body._id,
                 assigned_to: req.body.assigned_to,
                 status_text: req.body.status_text,
-                open: req.body.open === 'false'? false : true,
+                open: req.body.open,
                 issue_title: req.body.issue_title,
                 issue_text: req.body.issue_text,
                 created_by: req.body.created_by,
