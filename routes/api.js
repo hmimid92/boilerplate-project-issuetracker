@@ -117,19 +117,19 @@ module.exports = function (app) {
       if(!projectName) {
         res.send("no project found");
       }
+      if (!req.body.assigned_to ||
+        !req.body.status_text ||
+        !req.body.open ||
+        !req.body.issue_title ||
+        !req.body.issue_text ||
+        !req.body.created_by
+     ) {
+     res.json({ error: 'no update field(s) sent', '_id': req.body._id });
+          } 
       if (!issues.map(e => e._id.valueOf()).includes(req.body._id)) {
         res.json({ error: 'missing _id' });
       }
             try {
-              if (!req.body.assigned_to ||
-                !req.body.status_text ||
-                !req.body.open ||
-                !req.body.issue_title ||
-                !req.body.issue_text ||
-                !req.body.created_by
-             ) {
-             res.json({ error: 'no update field(s) sent', '_id': req.body._id });
-                  } else {
                     let issueUpdated = await Issue.findByIdAndUpdate(req.body._id,
                       {
                         assigned_to: req.body.assigned_to,
@@ -143,7 +143,6 @@ module.exports = function (app) {
         
                       await issueUpdated.save();
                       res.json({ result: 'successfully updated', '_id': req.body._id });  
-                  }
               } catch(err) {
                 res.json({ error: 'could not update', '_id': req.body._id });
               }
