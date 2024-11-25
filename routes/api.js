@@ -118,7 +118,8 @@ module.exports = function (app) {
       if (!issues.map(e => e._id.valueOf()).includes(req.body._id)) {
         res.json({ error: 'missing _id' });
         return;
-      } else if (!req.body.assigned_to ||
+      }
+       if (!req.body.assigned_to ||
            !req.body.status_text ||
            !req.body.open ||
            !req.body.issue_title ||
