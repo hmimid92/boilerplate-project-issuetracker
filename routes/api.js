@@ -125,9 +125,11 @@ module.exports = function (app) {
         !req.body.created_by
      ) {
      res.json({ error: 'no update field(s) sent', '_id': req.body._id });
+     return;
           } 
       if (!issues.map(e => e._id.valueOf()).includes(req.body._id)) {
         res.json({ error: 'missing _id' });
+        return;
       }
             try {
                     let issueUpdated = await Issue.findByIdAndUpdate(req.body._id,
