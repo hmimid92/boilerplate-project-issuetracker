@@ -113,15 +113,15 @@ module.exports = function (app) {
       let project = req.params.project;
       
       let projectName = await Project.findOne({ projectName: project });
-      const issues = await Issue.find({ project_id: projectName._id }).select("-__v");
+      // const issues = await Issue.find({ project_id: projectName._id }).select("-__v");
       if(!projectName) {
         res.send("no project found");
       }
-      if (!issues.map(e => e._id.valueOf()).includes(req.body._id)) {
+      if (!req.body._id) {
         res.json({ error: 'missing _id' });
         return;
       }
-
+// issues.map(e => e._id.valueOf()).includes()
       if (!req.body.assigned_to &&
         !req.body.status_text &&
         !req.body.open &&
@@ -131,7 +131,7 @@ module.exports = function (app) {
      ) {
      res.json({ error: 'no update field(s) sent', '_id': req.body._id });
       return;
-          } else {
+          } 
             try {
               await Issue.findByIdAndUpdate({_id: req.body._id},
                 {
@@ -149,8 +149,7 @@ module.exports = function (app) {
               } catch(err) {
                 res.json({ error: 'could not update', '_id': req.body._id });
               }
-          }
-              })
+     })
 
     .delete(async (req, res) => {
       let project = req.params.project;
