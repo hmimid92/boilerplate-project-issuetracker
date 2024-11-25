@@ -129,13 +129,14 @@ module.exports = function (app) {
               try {
                 let issueUpdated = await Issue.findByIdAndUpdate(req.body._id,
                   {
+                    _id: req.body._id,
                     assigned_to: req.body.assigned_to,
                     status_text: req.body.status_text,
                     open: req.body.open,
                     issue_title: req.body.issue_title,
                     issue_text: req.body.issue_text,
                     created_by: req.body.created_by,
-                    updated_on: new Date()
+                    updated_on: new Date(Date.now())
                   });
     
                   await issueUpdated.save();
@@ -156,6 +157,8 @@ module.exports = function (app) {
          await  Issue.findOneAndDelete({_id: req.body._id}).then(deleted => {
           if(deleted) {
             res.json({ result: 'successfully deleted', '_id': req.body._id });
+          } else {
+          res.json({ error: 'could not delete', '_id': req.body._id });
           }
          }).catch(err => {
           res.json({ error: 'could not delete', '_id': req.body._id });
