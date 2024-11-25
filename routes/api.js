@@ -141,8 +141,8 @@ module.exports = function (app) {
                 issue_title: req.body.issue_title,
                 issue_text: req.body.issue_text,
                 created_by: req.body.created_by,
-                updated_on: new Date(Date.now()).toString()
-              }, { new: true });
+                updated_on: new Date(Date.now())
+              });
 
               res.json({ result: 'successfully updated', '_id': req.body._id });  
             } catch(err) {
