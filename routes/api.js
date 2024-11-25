@@ -28,8 +28,7 @@ const Project = mongoose.model("Project", ProjectSchema);
 module.exports = function (app) {
 
   app.route('/api/issues/:project')
-
-    .get(async (req, res) => {
+  .get(async (req, res) => {
       let project = req.params.project;
       try {
         let projectName = await Project.findOne({ projectName: project });
@@ -76,7 +75,6 @@ module.exports = function (app) {
       }
 
     })
-
     .post(async (req, res) => {
       let project = req.params.project;
       if (!req.body.issue_title || !req.body.issue_text || !req.body.created_by) {
@@ -108,7 +106,6 @@ module.exports = function (app) {
         res.json({ error: 'could not post' });
       }
     })
-
     .put(async (req, res) => {
       let project = req.params.project;
       
@@ -149,21 +146,23 @@ module.exports = function (app) {
             }
       }
      })
-
-    .delete(async (req, res) => {
+     .delete(async (req, res) => {
       let project = req.params.project;
       let projectName = await Project.findOne({ projectName: project });
       const issues = await Issue.find({ project_id: projectName._id }).select("-__v");
-      try {
-         await  Issue.findOneAndDelete({_id: req.body._id})
-        
-      } catch (err) {
-           res.json({ error: 'could not delete', '_id': req.body._id });
+      if(!projectName) {
+        res.send("no project found");
       }
       if (!issues.map(e => e._id.valueOf()).includes(req.body._id)) {
         res.json({ error: 'missing _id' });
      } else {
-       res.json({ result: 'successfully deleted', '_id': req.body._id });
+      try {
+        let issueDeleted = await  Issue.findOneAndDelete(req.body._id);
+        await issueDeleted.save();
+        res.json({ result: 'successfully deleted', '_id': req.body._id });
+     } catch (err) {
+          res.json({ error: 'could not delete', '_id': req.body._id });
+     }
      }
     });
 
