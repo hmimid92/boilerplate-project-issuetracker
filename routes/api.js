@@ -122,7 +122,7 @@ module.exports = function (app) {
       }
 
       console.log(Object.keys(req.body))
-      if (!Object.keys(req.body).includes('assigned_to','status_text','open','issue_title','issue_text','created_by','updated_on')) {
+      if (!Object.keys(req.body).includes('assigned_to','status_text','open','issue_title','issue_text','created_by','updated_on','_id')) {
      res.json({ error: 'no update field(s) sent', '_id': req.body._id });
           } 
             try {
