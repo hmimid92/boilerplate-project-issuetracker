@@ -38,9 +38,6 @@ module.exports = function (app) {
           res.json(issues);
         } else {
 
-          // {
-          //   project_id: projectNameNew._id,
-          // }
           let issueFilter = {}
           if (req.query.open) {
             issueFilter["open"] = req.query.open
@@ -65,6 +62,9 @@ module.exports = function (app) {
           }
           if (req.query.updated_on) {
             issueFilter["updated_on"] = req.query.updated_on
+          }
+          if (req.query.project_id) {
+            issueFilter["updated_on"] = req.query.project_id
           }
 
           const issuesFilter = await Issue.find({...issueFilter,project_id: projectName._id});
