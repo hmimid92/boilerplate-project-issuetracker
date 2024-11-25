@@ -119,16 +119,7 @@ module.exports = function (app) {
         res.json({ error: 'missing _id' });
         return;
       }
-       if (!req.body.assigned_to ||
-           !req.body.status_text ||
-           !req.body.open ||
-           !req.body.issue_title ||
-           !req.body.issue_text ||
-           !req.body.created_by 
-        ) {
-        res.json({ error: 'no update field(s) sent', '_id': req.body._id });
-         return;
-        } else {
+      
           try {
             await Issue.findByIdAndUpdate({_id: req.body._id},
               {
@@ -140,13 +131,24 @@ module.exports = function (app) {
                 created_by: req.body.created_by,
                 updated_on: new Date(Date.now()).toString()
               }, { new: true });
+
+              if (!req.body.assigned_to ||
+                !req.body.status_text ||
+                !req.body.open ||
+                !req.body.issue_title ||
+                !req.body.issue_text ||
+                !req.body.created_by 
+             ) {
+             res.json({ error: 'no update field(s) sent', '_id': req.body._id });
+              return;
+             } else {
               res.json({ result: 'successfully updated', '_id': req.body._id });
+             }
   
             } catch(err) {
               res.json({ error: 'could not update', '_id': req.body._id });
             }
-        }
-    })
+              })
 
     .delete(async (req, res) => {
       let project = req.params.project;
