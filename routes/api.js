@@ -37,8 +37,6 @@ module.exports = function (app) {
           const issues = await Issue.find({project_id: projectName._id}).select("-__v");
           res.json(issues);
         } else {
-          console.log("dsvsdg")
-
           let issueFilter = {}
           if (req.query.open) {
             issueFilter["open"] = req.query.open
