@@ -127,8 +127,7 @@ module.exports = function (app) {
         !req.body.open &&
         !req.body.issue_title &&
         !req.body.issue_text &&
-        !req.body.created_by &&
-        !req.body._id 
+        !req.body.created_by
      ) {
      res.json({ error: 'no update field(s) sent', '_id': req.body._id });
       return;
