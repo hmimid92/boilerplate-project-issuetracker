@@ -63,9 +63,9 @@ module.exports = function (app) {
             issueFilter["updated_on"] = req.query.updated_on
           }
           if (req.query.project_id) {
-            issueFilter["updated_on"] = req.query.project_id
+            issueFilter["project_id"] = req.query.project_id
           }
-          const issuesFilter = await Issue.find({...issueFilter});
+          const issuesFilter = await Issue.find(issueFilter).select("-__v");
           res.json(issuesFilter);
         }
       } catch (error) {
