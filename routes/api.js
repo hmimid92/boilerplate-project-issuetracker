@@ -111,13 +111,14 @@ module.exports = function (app) {
 
     .put(async (req, res) => {
       let project = req.params.project;
+      try {
       let projectName = await Project.findOne({ projectName: project });
       const issues = await Issue.find({ project_id: projectName._id }).select("-__v");
       // console.log(issues.map(e => e._id.valueOf()))
       if (!issues.map(e => e._id.valueOf()).includes(req.body._id)) {
         res.json({ error: 'missing _id' })
       } else {
-        try {
+       
            await Issue.findByIdAndUpdate({_id: req.body._id},
             {
               assigned_to: req.body.assigned_to,
@@ -134,10 +135,10 @@ module.exports = function (app) {
           } else {
             res.json({ result: 'successfully updated', '_id': req.body._id });
           }
-        } catch(err) {
+        }
+       } catch(err) {
           res.json({ error: 'could not update', '_id': req.body._id });
         }
-      }
     })
 
     .delete(async (req, res) => {
