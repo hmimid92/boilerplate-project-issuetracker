@@ -133,7 +133,7 @@ module.exports = function (app) {
           } catch(err) {
             res.json({ error: 'could not update', '_id': req.body._id });
           }
-          if ( !req.body._id && !req.body.assigned_to && !req.body.status_text  && !req.body.open && !req.body.issue_title && !req.body.issue_text && !req.body.created_by) {
+          if ( req.body._id === undefined || req.body.assigned_to === undefined || req.body.status_text === undefined  || req.body.open === undefined || req.body.issue_title === undefined || req.body.issue_text === undefined || req.body.created_by === undefined) {
             res.json({ error: 'no update field(s) sent', '_id': req.body._id });
           } else {
             res.json({ result: 'successfully updated', '_id': req.body._id });
