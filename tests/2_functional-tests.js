@@ -124,7 +124,7 @@ suite('Functional Tests', function () {
       .keepOpen()
       .put('/api/issues/:project')
       .send({
-        "_id": "674463be7e056b5df25cfb38",
+        "_id": "6744d1f9f5871f8437f8fc33",
         "issue_title": "blockings"
       })
       .end(function (err, res) {
@@ -141,7 +141,7 @@ suite('Functional Tests', function () {
       .keepOpen()
       .put('/api/issues/:project')
       .send({
-        "_id": "674463be7e056b5df25cfb38",
+        "_id": "6744d1f9f5871f8437f8fc33",
         "issue_title": "blockings",
         "issue_text": "bug 25",
         "created_by": "mhammed"
@@ -217,7 +217,7 @@ suite('Functional Tests', function () {
       .keepOpen()
       .delete('/api/issues/:project')
       .send({
-        "_id": "6744c4dee851bcbc39468419"
+        "_id": "6744d1f9f5871f8437f8fc33"
       })
       .end(function (err, res) {
         assert.equal(res.status, 200);
