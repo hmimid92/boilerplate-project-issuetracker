@@ -217,7 +217,7 @@ suite('Functional Tests', function () {
       .keepOpen()
       .delete('/api/issues/:project')
       .send({
-        "_id": "6744679746a62508a8618755"
+        "_id": "674463be7e056b5df25cfb38"
       })
       .end(function (err, res) {
         assert.equal(res.status, 200);
