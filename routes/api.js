@@ -107,13 +107,6 @@ module.exports = function (app) {
       }
     })
     .put(async (req, res) => {
-      // let project = req.params.project;
-      
-      // let projectName = await Project.findOne({ projectName: project });
-      // const issues = await Issue.find({ project_id: projectName._id }).select("-__v");
-      // if(!projectName) {
-      //   res.send("no project found"); issues.map(e => e._id.valueOf()).includes(req.body._id)
-      // }
       if (!req.body._id) {
         res.json({ error: 'missing _id' });
         return;
